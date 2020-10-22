@@ -10,7 +10,7 @@ class UsersList extends Component {
     }
 
     renderUsersList() {
-        if (this.props.users.length === 0) {
+        if (!this.props.users || this.props.users.length === 0) {
             return <tr><td>Loading...</td></tr>
         }
         return this.props.users.map(user => {
@@ -22,7 +22,7 @@ class UsersList extends Component {
                     <td>{user.email}</td>
                     <td>
                         <div className="item-block buttons-block">
-                            <button><i className="icon-edit"></i></button>
+                            <Link to={`/user/${user.id}`}><i className="icon-edit"></i></Link>
                         </div>
                     </td>
                 </tr>

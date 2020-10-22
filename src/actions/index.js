@@ -5,18 +5,9 @@ import {
     FETCH_USERS,
     FETCH_POSTS,
     FETCH_COMMENTS,
-    FETCH_USER,
     FETCH_POST,
+    FETCH_USER_POSTS
 } from "./types";
-
-export const fetchPostsWithUsers = () => async (dispatch, getState) => {
-    await dispatch(fetchPosts());
-    const posts = getState().posts;
-    const userIds = _.uniq(_.map(posts, 'userId'));
-
-    userIds.forEach(id => dispatch(fetchUser(id)));
-};
-
 
 export const fetchPosts = () => dispatch => _fetchPosts(dispatch);
 const _fetchPosts = _.memoize(async dispatch => {
@@ -24,6 +15,15 @@ const _fetchPosts = _.memoize(async dispatch => {
 
     dispatch({
         type: FETCH_POSTS,
+        payload: result.data,
+    });
+});
+
+export const fetchUserPosts = id => dispatch => _fetchUserPosts(dispatch, id);
+const _fetchUserPosts = _.memoize(async (dispatch, id) => {
+    const result = await server.get(`/posts?userId=${id}`);
+    dispatch({
+        type: FETCH_USER_POSTS,
         payload: result.data,
     });
 });
@@ -38,24 +38,15 @@ const _fetchPost = _.memoize(async (id, dispatch) => {
     });
 });
 
-
-export const fetchUser = id => dispatch => _fetchUser(id, dispatch);
+export const fetchUsers = (id = null) => dispatch => _fetchUser(id, dispatch);
 const _fetchUser = _.memoize(async (id, dispatch) => {
-    const result = await server.get(`/users/${id}`);
-
-    dispatch({
-        type: FETCH_USER,
-        payload: result.data
-    });
-});
-
-export const fetchUsers = () => dispatch => _fetchUsers(dispatch);
-const _fetchUsers = _.memoize(async dispatch => {
-    const result = await server.get('/users');
+    const url = id ? `/users/${id}` : '/users'
+    const result = await server.get(url);
+    const payload = !Array.isArray(result.data) ? [result.data] : result.data
 
     dispatch({
         type: FETCH_USERS,
-        payload: result.data
+        payload: payload
     });
 });
 

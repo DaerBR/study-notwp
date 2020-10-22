@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchComments } from '../actions';
+import { fetchComments, fetchUsers } from '../actions';
 import { Link } from 'react-router-dom';
 
 class CommentsList extends Component {
+
     componentDidMount() {
+        this.props.fetchUsers();
         this.props.fetchComments();
     }
 
@@ -21,12 +23,17 @@ class CommentsList extends Component {
             return <tr><td>Loading...</td></tr>
         }
         return this.props.comments.map(comment => {
+            // This won't work - JSONplaceholder's Comments emails have nothing to do with it's userlist. Sadly - emails only here.
+            const userData = this.props.users.find((user) => {
+                return user.email === comment.email
+            });
+
             return(
                 <tr key={comment.id}>
                     <td>{comment.id}</td>
                     <td><Link to={`/post/${comment.postId}`}>{comment.name}</Link></td>
                     <td>{comment.body}</td>
-                    <td>{comment.email}</td>
+                    <td>{userData ? <Link to={`/users/${userData.userId}`}>{userData.username}</Link> : comment.email}</td>
                     <td>{this.getRandomDate()}</td>
                     <td>
                         <div className="item-block buttons-block">
@@ -68,7 +75,7 @@ class CommentsList extends Component {
 }
 
 const mapStateToProps = (state) => {
-    return { comments: state.comments }
+    return { comments: state.comments, users: state.users }
 };
 
-export default connect(mapStateToProps, { fetchComments })(CommentsList);
+export default connect(mapStateToProps, { fetchComments, fetchUsers })(CommentsList);

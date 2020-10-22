@@ -1,23 +1,25 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
-import { fetchPostsWithUsers } from '../actions';
+import { fetchPosts, fetchUsers } from '../actions';
 import { Link } from "react-router-dom";
 
 class PostsList extends Component {
     componentDidMount() {
-        this.props.fetchPostsWithUsers();
+        this.props.fetchUsers();
+        this.props.fetchPosts();
     }
     renderPostsList() {
         if (this.props.posts.length === 0) {
             return <tr><td>Loading...</td></tr>
         }
-        console.log(this.props);
+
         return this.props.posts.map(post => {
+            const userData = this.props.users.find(user => user.id === post.userId);
             return (
                 <tr key={post.id}>
                     <td>{post.id}</td>
                     <td><Link className="icon-url" to={`/post/${post.id}`}>{post.title}</Link></td>
-                    <td><Link to={`/user/${post.userId}`}>{post.userId}</Link></td>
+                    <td><Link to={`/user/${post.userId}`}>{userData ? userData.username : post.userId}</Link></td>
                     <td>
                         <div className="item-block buttons-block">
                             <button><Link className="icon-url" to={`/post/${post.id}`}><i className="icon-edit"></i></Link></button>
@@ -66,5 +68,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
     mapStateToProps,
-    { fetchPostsWithUsers }
+    { fetchPosts, fetchUsers }
 )(PostsList);
