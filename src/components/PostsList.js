@@ -11,7 +11,7 @@ class PostsList extends Component {
         if (this.props.posts.length === 0) {
             return <tr><td>Loading...</td></tr>
         }
-
+        console.log(this.props);
         return this.props.posts.map(post => {
             return (
                 <tr key={post.id}>
