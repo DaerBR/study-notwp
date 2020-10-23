@@ -4,17 +4,37 @@ import { fetchPosts, fetchUsers } from '../actions';
 import { Link } from "react-router-dom";
 
 class PostsList extends Component {
+    state = { term: '' };
+
     componentDidMount() {
         this.props.fetchUsers();
         this.props.fetchPosts();
     }
+    onSearchInputChange = async  e => {
+        await this.setState({ term: e.target.value });
+    }
+
+    filterPosts = (posts) => {
+        let result = [];
+
+        posts.forEach(post => {
+            if (post.title.indexOf(this.state.term) !== -1) {
+                result.push(post);
+            }
+        });
+
+        return result;
+    }
     renderPostsList() {
-        if (this.props.posts.length === 0) {
-            return <tr><td>Loading...</td></tr>
+        const filteredPosts = this.state.term === '' ? this.props.posts : this.filterPosts(this.props.posts);
+
+        if (filteredPosts.length === 0) {
+            return <tr><td>No posts found...</td></tr>
         }
 
-        return this.props.posts.map(post => {
+        return filteredPosts.map(post => {
             const userData = this.props.users.find(user => user.id === post.userId);
+
             return (
                 <tr key={post.id}>
                     <td>{post.id}</td>
@@ -38,8 +58,8 @@ class PostsList extends Component {
                 <div className="page-title-block">
                     <h1 className="page-title">Posts</h1>
                     <div className="search-block">
-                        <input type="text" name="search-posts"/>
-                        <button className="header-search-button">Search posts</button>
+                        <label className="header-search-label">Filter by title:</label>
+                        <input type="text" name="search-posts" value={this.state.term} onChange={(e) => {this.onSearchInputChange(e)}}/>
                     </div>
                 </div>
                 <div className="list-wrapper">

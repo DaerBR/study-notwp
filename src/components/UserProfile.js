@@ -9,7 +9,7 @@ class UserProfile extends Component {
         this.props.fetchUsers(this.props.match.params.id);
         this.props.fetchUserPosts(this.props.match.params.id);
     }
-    renderUserPosts(user) {
+    renderUserPosts() {
         if (this.props.usersPosts.length === 0) {
             return <div>No posts from this user yet...</div>
         }

@@ -36,8 +36,8 @@ class UsersList extends Component {
                 <div className="page-title-block">
                     <h1 className="page-title">Users</h1>
                     <div className="search-block">
+                        <label className="header-search-label">Filter by username:</label>
                         <input type="text" name="search-posts"/>
-                        <button className="header-search-button">Search users</button>
                     </div>
                 </div>
                 <div className="list-wrapper">
