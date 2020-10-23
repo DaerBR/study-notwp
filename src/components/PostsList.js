@@ -1,92 +1,74 @@
-import React, {Component} from 'react';
-import { connect } from 'react-redux';
-import { fetchPosts, fetchUsers } from '../actions';
-import { Link } from "react-router-dom";
+import React, {useState, useEffect} from 'react';
+import server from "../apis/server";
+import Link from "./Link";
 
-class PostsList extends Component {
-    state = { term: '' };
+const PostList = () => {
+    const [term, setTerm] = useState('');
+    const [posts, setPosts] = useState([]);
+    const [users, setUsers] = useState([]);
 
-    componentDidMount() {
-        this.props.fetchUsers();
-        this.props.fetchPosts();
-    }
-    onSearchInputChange = async  e => {
-        await this.setState({ term: e.target.value });
-    }
+    useEffect( () => {
+        const getPosts = async () => {
+            const { data } = await server.get('/posts');
+            setPosts(data);
+        };
+        getPosts();
+    }, []);
 
-    filterPosts = (posts) => {
-        let result = [];
+    useEffect( () => {
+        const getUsers = async () => {
+            const { data } = await server.get('/users');
+            setUsers(data);
+        };
+        getUsers();
+    }, []);
 
-        posts.forEach(post => {
-            if (post.title.indexOf(this.state.term) !== -1) {
-                result.push(post);
-            }
-        });
-
-        return result;
-    }
-    renderPostsList() {
-        const filteredPosts = this.state.term === '' ? this.props.posts : this.filterPosts(this.props.posts);
-
-        if (filteredPosts.length === 0) {
-            return <tr><td>No posts found...</td></tr>
-        }
-
-        return filteredPosts.map(post => {
-            const userData = this.props.users.find(user => user.id === post.userId);
-
-            return (
-                <tr key={post.id}>
-                    <td>{post.id}</td>
-                    <td><Link className="icon-url" to={`/post/${post.id}`}>{post.title}</Link></td>
-                    <td><Link to={`/user/${post.userId}`}>{userData ? userData.username : post.userId}</Link></td>
-                    <td>
-                        <div className="item-block buttons-block">
-                            <button><Link className="icon-url" to={`/post/${post.id}`}><i className="icon-edit"></i></Link></button>
-                            <button><Link className="icon-url" to={`/post/${post.id}`}><i className="icon-cross-close"></i></Link></button>
-                        </div>
-                    </td>
-                </tr>
-            );
-
-        });
-    }
-
-    render() {
+    const onSearchInputChange = async  e => {
+        await setTerm(e.target.value);
+    };
+    const renderPosts = posts.map((post) => {
+        const userData = users.find(user => user.id === post.userId);
         return (
-            <React.Fragment>
-                <div className="page-title-block">
-                    <h1 className="page-title">Posts</h1>
-                    <div className="search-block">
-                        <label className="header-search-label">Filter by title:</label>
-                        <input type="text" name="search-posts" value={this.state.term} onChange={(e) => {this.onSearchInputChange(e)}}/>
+            <tr key={post.id}>
+                <td>{post.id}</td>
+                <td><Link className="icon-url" href={`/post/${post.id}`}>{post.title}</Link></td>
+                <td><Link href={`/user/${post.userId}`}>{userData ? userData.username : post.userId}</Link></td>
+                <td>
+                    <div className="item-block buttons-block">
+                        <button><Link className="icon-url" href={`/post/${post.id}`}><i className="icon-edit"></i></Link></button>
+                        <button><Link className="icon-url" href={`/post/${post.id}`}><i className="icon-cross-close"></i></Link></button>
                     </div>
-                </div>
-                <div className="list-wrapper">
-                    <table>
-                        <thead className="list-header">
-                            <tr>
-                                <th className="item-block header-block">ID</th>
-                                <th className="item-block header-block">Title</th>
-                                <th className="item-block header-block">Author</th>
-                                <th className="item-block header-block">Tools</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        {this.renderPostsList()}
-                        </tbody>
-                    </table>
-                </div>
-            </React.Fragment>
+                </td>
+            </tr>
         );
-    }
-}
+    });
 
-const mapStateToProps = (state) => {
-    return { posts: state.posts, users: state.users };
+    return (
+        <React.Fragment>
+            <div className="page-title-block">
+                <h1 className="page-title">Posts</h1>
+                <div className="search-block">
+                    <label className="header-search-label">Filter by title:</label>
+                    <input type="text" name="search-posts" value={term} onChange={(e) => {onSearchInputChange(e)}}/>
+                </div>
+            </div>
+            <div className="list-wrapper">
+                <table>
+                    <thead className="list-header">
+                    <tr>
+                        <th className="item-block header-block">ID</th>
+                        <th className="item-block header-block">Title</th>
+                        <th className="item-block header-block">Author</th>
+                        <th className="item-block header-block">Tools</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {!posts.length ? <tr><td>No posts found...</td></tr> : renderPosts}
+                    </tbody>
+                </table>
+            </div>
+        </React.Fragment>
+    );
 };
 
-export default connect(
-    mapStateToProps,
-    { fetchPosts, fetchUsers }
-)(PostsList);
+export default PostList;

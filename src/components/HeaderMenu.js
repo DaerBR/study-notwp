@@ -1,12 +1,12 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import Link from "./Link";
 
 const HeaderMenu = () => {
     return (
         <div className="header-menu">
-            <Link to="/">Posts</Link>
-            <Link to="/comments">Comments</Link>
-            <Link to="/users">Users</Link>
+            <Link href="/">Posts</Link>
+            <Link href="/comments">Comments</Link>
+            <Link href="/users">Users</Link>
         </div>
     );
 };

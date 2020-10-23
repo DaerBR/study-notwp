@@ -1,67 +1,60 @@
-import React, {Component} from 'react';
-import { connect } from 'react-redux';
-import { fetchUsers } from "../actions";
-import { Link } from 'react-router-dom';
+import React, {useState, useEffect} from 'react';
+import server from "../apis/server";
+import Link from "./Link";
 
+const UsersList = () => {
+    const [users, setUsers] = useState([]);
 
-class UsersList extends Component {
-    componentDidMount() {
-        this.props.fetchUsers();
-    }
+    useEffect( () => {
+        const getUsers = async () => {
+            const { data } = await server.get('/users');
+            setUsers(data);        };
 
-    renderUsersList() {
-        if (!this.props.users || this.props.users.length === 0) {
-            return <tr><td>Loading...</td></tr>
-        }
-        return this.props.users.map(user => {
-            return (
-                <tr key={user.id}>
-                    <td>{user.id}</td>
-                    <td><Link to={`/user/${user.id}`}>{user.username}</Link></td>
-                    <td><Link to={`/user/${user.id}`}>{user.name}</Link></td>
-                    <td>{user.email}</td>
-                    <td>
-                        <div className="item-block buttons-block">
-                            <Link to={`/user/${user.id}`}><i className="icon-edit"></i></Link>
-                        </div>
-                    </td>
-                </tr>
-            );
-        });
-    }
+        getUsers();
+    }, []);
 
-    render() {
+    const renderUsers = users.map((user) => {
         return (
-            <React.Fragment>
-                <div className="page-title-block">
-                    <h1 className="page-title">Users</h1>
-                    <div className="search-block">
-                        <label className="header-search-label">Filter by username:</label>
-                        <input type="text" name="search-posts"/>
+            <tr key={user.id}>
+                <td>{user.id}</td>
+                <td><Link href={`/user/${user.id}`}>{user.username}</Link></td>
+                <td><Link href={`/user/${user.id}`}>{user.name}</Link></td>
+                <td>{user.email}</td>
+                <td>
+                    <div className="item-block buttons-block">
+                        <Link href={`/user/${user.id}`}><i className="icon-edit"></i></Link>
                     </div>
-                </div>
-                <div className="list-wrapper">
-                    <table>
-                        <thead className="list-header">
-                        <tr>
-                            <th className="item-block header-block">ID</th>
-                            <th className="item-block header-block">User name</th>
-                            <th className="item-block header-block">Full name</th>
-                            <th className="item-block header-block">Email</th>
-                            <th className="item-block header-block">Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {this.renderUsersList()}
-                       </tbody>
-                    </table>
-                </div>
-            </React.Fragment>
+                </td>
+            </tr>
         );
-    }
-}
+    });
 
-const mapStateToProps = (state) => {
-    return { users: state.users };
-}
-export default connect(mapStateToProps, { fetchUsers })(UsersList);
+    return (
+        <React.Fragment>
+            <div className="page-title-block">
+                <h1 className="page-title">Users</h1>
+                <div className="search-block">
+                    <label className="header-search-label">Filter by username:</label>
+                    <input type="text" name="search-posts"/>
+                </div>
+            </div>
+            <div className="list-wrapper">
+                <table>
+                    <thead className="list-header">
+                    <tr>
+                        <th className="item-block header-block">ID</th>
+                        <th className="item-block header-block">User name</th>
+                        <th className="item-block header-block">Full name</th>
+                        <th className="item-block header-block">Email</th>
+                        <th className="item-block header-block">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {!users.length ? <tr><td>No users found...</td></tr> : renderUsers}
+                    </tbody>
+                </table>
+            </div>
+        </React.Fragment>
+    );
+};
+export default UsersList;
