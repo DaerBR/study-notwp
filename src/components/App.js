@@ -26,7 +26,7 @@ const App = () => {
                     {/*<Route path="/post/:id">*/}
                     {/*    <UsersList />*/}
                     {/*</Route>*/}
-                    <Route path="/user/:id">
+                    <Route path='/user/'>
                         <UserProfile />
                     </Route>
                 </div>
