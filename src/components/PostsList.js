@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import server from "../apis/server";
-import Link from "./Link";
+import { Link } from "react-router-dom";
 
 const PostList = () => {
     const [term, setTerm] = useState('');
