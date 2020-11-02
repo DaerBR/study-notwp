@@ -214,3 +214,11 @@ a {
 .posts-block {
   border-bottom: 1px solid $black;
 }
+
+.completed-todo {
+  color: green;
+}
+.active-todo {
+  color: red;
+  font-weight: bold;
+}

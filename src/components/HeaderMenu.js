@@ -7,6 +7,7 @@ const HeaderMenu = () => {
             <Link to="/">Posts</Link>
             <Link to="/comments">Comments</Link>
             <Link to="/users">Users</Link>
+            <Link to="/todos">Todos</Link>
         </div>
     );
 };

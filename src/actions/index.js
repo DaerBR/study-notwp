@@ -6,8 +6,16 @@ import {
     FETCH_POSTS,
     FETCH_COMMENTS,
     FETCH_POST,
-    FETCH_USER_POSTS
+    FETCH_USER_POSTS, FETCH_TODOS
 } from "./types";
+
+export const fetchTodos = () => async dispatch => {
+    const result = await server.get('/todos');
+    dispatch({
+        type: FETCH_TODOS,
+        payload: result.data
+    });
+};
 
 export const fetchPosts = () => dispatch => _fetchPosts(dispatch);
 const _fetchPosts = _.memoize(async dispatch => {
@@ -43,7 +51,6 @@ const _fetchUser = _.memoize(async (id, dispatch) => {
     const url = id ? `/users/${id}` : '/users'
     const result = await server.get(url);
     const payload = !Array.isArray(result.data) ? [result.data] : result.data
-
     dispatch({
         type: FETCH_USERS,
         payload: payload
@@ -60,3 +67,4 @@ const _fetchComments = _.memoize(async dispatch => {
         payload: result.data
     });
 });
+

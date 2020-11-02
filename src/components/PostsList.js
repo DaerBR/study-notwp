@@ -35,7 +35,6 @@ class PostsList extends Component {
                 <td>No posts found...</td>
             </tr>
         }
-
         return filteredPosts.map(post => {
             const userData = this.props.users.find(user => user.id === post.userId);
 

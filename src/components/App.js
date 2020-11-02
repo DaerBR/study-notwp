@@ -8,6 +8,7 @@ import Post from "./Post";
 import UsersList from "./UsersList";
 import UserProfile from "./UserProfile";
 import CommentsList from "./CommentsList";
+import TodosList from "./TodosList";
 
 import history from "../history";
 
@@ -26,6 +27,7 @@ class App extends Component {
                             <Route path="/users" exact component={UsersList} />
                             <Route path="/user/:id" exact component={UserProfile} />
                             <Route path="/comments" exact component={CommentsList} />
+                            <Route path="/todos" exact component={TodosList} />
                         </Switch>
                     </div>
                 </Router>
