@@ -1,17 +1,18 @@
 import React, {Component} from 'react';
-import { connect } from 'react-redux';
-import { fetchPosts, fetchUsers } from '../actions';
-import { Link } from "react-router-dom";
+import {connect} from 'react-redux';
+import {fetchPosts, fetchUsers} from '../actions';
+import {Link} from "react-router-dom";
 
 class PostsList extends Component {
-    state = { term: '' };
+    state = {term: ''};
 
     componentDidMount() {
         this.props.fetchUsers();
         this.props.fetchPosts();
     }
-    onSearchInputChange = async  e => {
-        await this.setState({ term: e.target.value });
+
+    onSearchInputChange = async e => {
+        await this.setState({term: e.target.value});
     }
 
     filterPosts = (posts) => {
@@ -25,11 +26,14 @@ class PostsList extends Component {
 
         return result;
     }
+
     renderPostsList() {
         const filteredPosts = this.state.term === '' ? this.props.posts : this.filterPosts(this.props.posts);
 
         if (filteredPosts.length === 0) {
-            return <tr><td>No posts found...</td></tr>
+            return <tr>
+                <td>No posts found...</td>
+            </tr>
         }
 
         return filteredPosts.map(post => {
@@ -42,8 +46,10 @@ class PostsList extends Component {
                     <td><Link to={`/user/${post.userId}`}>{userData ? userData.username : post.userId}</Link></td>
                     <td>
                         <div className="item-block buttons-block">
-                            <button><Link className="icon-url" to={`/post/${post.id}`}><i className="icon-edit"></i></Link></button>
-                            <button><Link className="icon-url" to={`/post/${post.id}`}><i className="icon-cross-close"></i></Link></button>
+                            <button><Link className="icon-url" to={`/post/${post.id}`}><i
+                                className="icon-edit"></i></Link></button>
+                            <button><Link className="icon-url" to={`/post/${post.id}`}><i
+                                className="icon-cross-close"></i></Link></button>
                         </div>
                     </td>
                 </tr>
@@ -59,18 +65,20 @@ class PostsList extends Component {
                     <h1 className="page-title">Posts</h1>
                     <div className="search-block">
                         <label className="header-search-label">Filter by title:</label>
-                        <input type="text" name="search-posts" value={this.state.term} onChange={(e) => {this.onSearchInputChange(e)}}/>
+                        <input type="text" name="search-posts" value={this.state.term} onChange={(e) => {
+                            this.onSearchInputChange(e)
+                        }}/>
                     </div>
                 </div>
                 <div className="list-wrapper">
                     <table>
                         <thead className="list-header">
-                            <tr>
-                                <th className="item-block header-block">ID</th>
-                                <th className="item-block header-block">Title</th>
-                                <th className="item-block header-block">Author</th>
-                                <th className="item-block header-block">Tools</th>
-                            </tr>
+                        <tr>
+                            <th className="item-block header-block">ID</th>
+                            <th className="item-block header-block">Title</th>
+                            <th className="item-block header-block">Author</th>
+                            <th className="item-block header-block">Tools</th>
+                        </tr>
                         </thead>
                         <tbody>
                         {this.renderPostsList()}
@@ -83,10 +91,10 @@ class PostsList extends Component {
 }
 
 const mapStateToProps = (state) => {
-    return { posts: state.posts, users: state.users };
+    return {posts: state.posts, users: state.users};
 };
 
 export default connect(
     mapStateToProps,
-    { fetchPosts, fetchUsers }
+    {fetchPosts, fetchUsers}
 )(PostsList);
