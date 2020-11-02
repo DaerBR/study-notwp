@@ -4,9 +4,9 @@ import { Link } from "react-router-dom";
 const HeaderMenu = () => {
     return (
         <div className="header-menu">
-            <Link href="/">Posts</Link>
-            <Link href="/comments">Comments</Link>
-            <Link href="/users">Users</Link>
+            <Link to="/">Posts</Link>
+            <Link to="/comments">Comments</Link>
+            <Link to="/users">Users</Link>
         </div>
     );
 };

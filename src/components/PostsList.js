@@ -31,12 +31,12 @@ const PostList = () => {
         return (
             <tr key={post.id}>
                 <td>{post.id}</td>
-                <td><Link className="icon-url" href={`/post/${post.id}`}>{post.title}</Link></td>
-                <td><Link href={`/user/${post.userId}`}>{userData ? userData.username : post.userId}</Link></td>
+                <td><Link className="icon-url" to={`/post/${post.id}`}>{post.title}</Link></td>
+                <td><Link to={`/user/${post.userId}`}>{userData ? userData.username : post.userId}</Link></td>
                 <td>
                     <div className="item-block buttons-block">
-                        <button><Link className="icon-url" href={`/post/${post.id}`}><i className="icon-edit"></i></Link></button>
-                        <button><Link className="icon-url" href={`/post/${post.id}`}><i className="icon-cross-close"></i></Link></button>
+                        <button><Link className="icon-url" to={`/post/${post.id}`}><i className="icon-edit"></i></Link></button>
+                        <button><Link className="icon-url" to={`/post/${post.id}`}><i className="icon-cross-close"></i></Link></button>
                     </div>
                 </td>
             </tr>

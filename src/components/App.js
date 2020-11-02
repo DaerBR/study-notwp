@@ -1,4 +1,4 @@
-import React, {useState, useEffect, Component} from 'react';
+import React from 'react';
 import './App.scss';
 import HeaderMenu from './HeaderMenu';
 import PostsList from "./PostsList";

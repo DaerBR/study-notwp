@@ -1,1 +1,3 @@
-export const history = window.history;
+import { createBrowserHistory } from "history";
+
+export default createBrowserHistory();

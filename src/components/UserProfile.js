@@ -9,7 +9,7 @@ const Users = () => {
 
     useEffect(() => {
         const getUserData = async () => {
-            const { data } = await server.get(`/posts/user/${this.props.match.id}`)
+            const { data } = await server.get(`/posts/user/${this.props.match.params.id}`)
             setUser(data);
         };
         getUserData();
@@ -17,7 +17,7 @@ const Users = () => {
 
     useEffect( () => {
         const getUserPosts = async () => {
-            const { data } = await server.get(`/posts/?userId=${this.props.match.id}`);
+            const { data } = await server.get(`/posts/?userId=${this.props.match.params.id}`);
             setUserPosts(data);
         };
         getUserPosts();

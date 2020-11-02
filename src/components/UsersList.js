@@ -17,12 +17,12 @@ const UsersList = () => {
         return (
             <tr key={user.id}>
                 <td>{user.id}</td>
-                <td><Link href={`/user/${user.id}`}>{user.username}</Link></td>
-                <td><Link href={`/user/${user.id}`}>{user.name}</Link></td>
+                <td><Link to={`/user/${user.id}`}>{user.username}</Link></td>
+                <td><Link to={`/user/${user.id}`}>{user.name}</Link></td>
                 <td>{user.email}</td>
                 <td>
                     <div className="item-block buttons-block">
-                        <Link href={`/user/${user.id}`}><i className="icon-edit"></i></Link>
+                        <Link to={`/user/${user.id}`}><i className="icon-edit"></i></Link>
                     </div>
                 </td>
             </tr>
