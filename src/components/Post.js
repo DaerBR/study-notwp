@@ -1,21 +1,21 @@
 import React, {useState, useEffect} from 'react';
-import { fetchPost } from "../actions";
-import _ from 'lodash';
 import { Link } from "react-router-dom";
+import _ from 'lodash';
 import server from "../apis/server";
 
-const Post = () => {
+const Post = (props) => {
     const [post, setPost] = useState({});
 
     useEffect(()=> {
+        console.log(props.match.params.id);
         const getPost = async () => {
-            const { data } = await server.get(`/post/${this.props.match.params.id}`);
+            const { data } = await server.get(`/posts/${props.match.params.id}`);
             setPost(data);
         };
 
         getPost();
 
-    }, []);
+    }, [props.match.params.id]);
 
     return (
             <React.Fragment>
