@@ -15,10 +15,10 @@ class PostsList extends Component {
         await this.setState({term: e.target.value});
     }
 
-    filterPosts = (posts) => {
-        let result = [];
+    filterPosts = () => {
+        const result = [];
 
-        posts.forEach(post => {
+        this.props.posts.forEach(post => {
             if (post.title.indexOf(this.state.term) !== -1) {
                 result.push(post);
             }
@@ -28,7 +28,7 @@ class PostsList extends Component {
     }
 
     renderPostsList() {
-        const filteredPosts = this.state.term === '' ? this.props.posts : this.filterPosts(this.props.posts);
+        const filteredPosts = this.state.term === '' ? this.props.posts : this.filterPosts();
 
         if (filteredPosts.length === 0) {
             return <tr>

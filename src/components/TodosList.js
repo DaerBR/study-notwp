@@ -4,15 +4,30 @@ import {fetchTodos, fetchUsers} from "../actions";
 import {Link} from "react-router-dom";
 
 class TodosList extends Component {
+    state = { term: ''};
+
     componentDidMount() {
         this.props.fetchUsers();
         this.props.fetchTodos();
     }
 
-    renderTodosList() {
-        const todos = this.props.todos;
+    onSearchInputChange = async e => {
+        await this.setState({term: e.target.value});
+    }
+    filterTodos() {
+        const result = [];
 
-        if (todos.length === 0) {
+        this.props.todos.forEach(todo => {
+            if (todo.title.indexOf(this.state.term) !== -1) {
+                result.push(todo);
+            }
+        });
+        return result;
+    }
+    renderTodosList() {
+        const filteredTodos = this.state.term === '' ? this.props.todos : this.filterTodos();
+
+        if (filteredTodos.length === 0) {
             return (
                 <tr>
                     <td>No todos found...</td>
@@ -20,15 +35,13 @@ class TodosList extends Component {
             );
         }
 
-        console.log(this.props);
-        return todos.map(todo => {
+        return filteredTodos.map(todo => {
             const userData = this.props.users.find(user => user.id === todo.userId);
             return (
                 <tr key={todo.id}>
                     <td>{todo.id}</td>
                     <td>{todo.title}</td>
                     <td><Link to={`/user/${todo.userId}`}>{userData ? userData.username : todo.userId}</Link></td>
-                    <td>{todo.title}</td>
                     <td><span className={todo.completed ? 'completed-todo' : 'active-todo'}>{todo.completed ? 'Completed' : 'Active'}</span></td>
                 </tr>
             );
@@ -40,7 +53,14 @@ class TodosList extends Component {
             <React.Fragment>
                 <div className="page-title-block">
                     <h1 className="page-title">To do list</h1>
+                    <div className="search-block">
+                        <label className="header-search-label">Filter by title:</label>
+                        <input type="text" name="search-todos" value={this.state.term} onChange={(e) => {
+                            this.onSearchInputChange(e)
+                        }}/>
+                    </div>
                 </div>
+
                 <div className="list-wrapper">
                     <table>
                         <thead className="list-header">
