@@ -15,7 +15,7 @@ class CommentsList extends Component {
         const end = new Date();
         const randomDate = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 
-        return randomDate.toGMTString();
+        return randomDate.toLocaleDateString();
     }
 
     renderCommentsList = () => {
