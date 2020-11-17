@@ -11,7 +11,7 @@ import {
 
 export const fetchTodos = () => async dispatch => {
     const result = await server.get('/todos');
-    dispatch({
+    return dispatch({
         type: FETCH_TODOS,
         payload: result.data
     });
@@ -20,8 +20,7 @@ export const fetchTodos = () => async dispatch => {
 export const fetchPosts = () => dispatch => _fetchPosts(dispatch);
 const _fetchPosts = _.memoize(async dispatch => {
     const result = await server.get('/posts');
-
-    dispatch({
+    return dispatch({
         type: FETCH_POSTS,
         payload: result.data,
     });

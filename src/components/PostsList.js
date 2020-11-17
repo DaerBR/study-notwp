@@ -64,7 +64,7 @@ class PostsList extends Component {
                     <h1 className="page-title">Posts</h1>
                     <div className="search-block">
                         <label className="header-search-label">Filter by title:</label>
-                        <input type="text" name="search-posts" value={this.state.term} onChange={(e) => {
+                        <input id="search-posts" type="text" name="search-posts" value={this.state.term} onChange={(e) => {
                             this.onSearchInputChange(e)
                         }}/>
                     </div>
